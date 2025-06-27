@@ -1,9 +1,17 @@
 #A Llevar regisstro de datos (npmbre, apellido, fech ncimiento, DNI,
 # Tutor, TodasNotas, cant de faltas, cant. amonestaciones)
 datos= { "Alumnos":[] }
+def registro():
+    print("--Registro de Alumnos--")
+    if not datos["Alumnos"]:
+        print("no hay alumnos cargados")
+        return
+    for i, alumno in enumerate(datos["Alumnos"],1):
+        print(f"{i}. {alumno['Nombre']} {alumno['Apellido']}")
+    print()
 
 def agregarAlumno():
-    print("--Agregar alumno-- ")
+    print("--Agregar alumno nuevo-- ")
     nombre= input("Nombre: ")
     apellido= input("Apellido: ")
     nacimiento=input("Fecha de Nacimiento (dd/mm/aaaa):  ")
@@ -27,24 +35,21 @@ def agregarAlumno():
     datos["Alumnos"].append(alumno)
     print("Alumno cargado correctamente\n")
 
-def registro():
-    if not datos["Alumnos"]:
-        print("No hay alumnos registrados")
-    for i, alumno in enumerate(datos["Alumnos"]):  #enumerate da el num de indice (posicion)
-        print(f"{i+1}. {alumno['Nombre']} {alumno['Apellido']} - DNI: {alumno['DNI']}")
-    print()
-        
 def mostrarDatos():
-    print("--Lista de alumnos--")
+    registro()
     if not datos["Alumnos"]:
         print("No hay alumnos cargados")
         return
     
-    i=1
-    for alumno in datos["Alumnos"]:
-        print(f"{i}. {alumno['Nombre']} {alumno['Apellido']} - DNI: {alumno['DNI']}")
-        i +=1
-    print()
+    try:
+        mostrar= int(input("Numero del alumno a mostrar: "))-1
+        alumno= datos["Alumnos"][mostrar]
+        print("--Datos Completos del alumno--")
+        for clave, valor in alumno.items():   #recorre el diccionario alumno  # .items() convierte el diccionario en pares
+            print(f"{clave}: {valor}")      #clave va a ser nombre y apellido y valor Mica, Juarez, etc
+        print()
+    except (ValueError, IndexError):
+        print("Numero invalido")
 
 def modDatos():
     registro()
@@ -81,6 +86,8 @@ def modDatos():
         
 def expulsar():
     registro()
+    if not datos["Alumnos"]:
+        return
     try:
         num= int(input("Numero del alumno a expulsar: "))-1
         alumno= datos["Alumnos"].pop(num)
@@ -91,21 +98,24 @@ def expulsar():
 def menu():
     while True:
         print("--MENU--")
-        print("a. Agregar alumno")
-        print("b. Mostrar datos de alumno")
-        print("c.Modificar los datos de los alumnos")
-        print("d.Expulsar alumnos")
-        print("Salir")
+        print("a. Ver el registro de alumnos")
+        print("b. Mostrar datos de un alumno")
+        print("c.Modificar los datos de un alumno")
+        print("d.Agregar alumno")
+        print("e. Expulsar alumno")
+        print("f. salir")
         opcion=input("Ingrese una opcion: ")
         if opcion== "a":
-            agregarAlumno()
+            registro()
         elif opcion=="b":
             mostrarDatos()
         elif opcion=="c":
             modDatos()
         elif opcion=="d":
+            agregarAlumno()
+        elif opcion == "e":
             expulsar()
-        elif opcion=="Salir":
+        elif opcion=="f":
             print("Saliendo...")
             break
         else:
